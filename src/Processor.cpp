@@ -460,14 +460,42 @@ bool Trace::get_dramtrace_request(long& req_addr, Request::Type& req_type)
         return false;
     }
     size_t pos;
-    req_addr = std::stoul(line, &pos, 16);
-
-    pos = line.find_first_not_of(' ', pos+1);
-
-    if (pos == string::npos || line.substr(pos)[0] == 'R')
-        req_type = Request::Type::READ;
-    else if (line.substr(pos)[0] == 'W')
-        req_type = Request::Type::WRITE;
-    else assert(false);
-    return true;
+	size_t num;
+	num = line.find_first_not_of(' ');
+	if(line[num]=='0'){
+	    req_addr = std::stoul(line, &pos, 16);
+	    pos = line.find_first_not_of(' ', pos+1);
+		//optional debug statements, TODO - enable flag to toggle on
+	    cout<< line << "  " << pos << " " <<line[pos]<<"\n";
+	    if (pos == string::npos || line.substr(pos)[0] == 'R')
+			req_type = Request::Type::READ;
+	    else if (line.substr(pos)[0] == 'W')
+			req_type = Request::Type::WRITE;
+	    else 
+			assert(false);
+	}
+	else if(line[num]=='G')
+	{
+	    pos = 0;
+	    line = line.substr(2);
+	    req_addr = std::stoul(line, &pos, 16);
+	    pos = line.find_first_not_of(' ', pos+1);
+		//optional debug statements, TODO - enable flag to toggle on
+		//cout<<"----->";
+	    //cout<< line << "  " << pos << " " <<line[pos]<<"\n";
+	    if (pos == string::npos || line.substr(pos)[0] == 'R')
+			req_type = Request::Type::GCREAD;
+	    else if (line.substr(pos)[0] == 'W')
+			req_type = Request::Type::GCWRITE;
+	    else assert(false);
+	}
+   else if(line[num]=='S'){
+		req_type = Request::Type::STARTITERATION;
+    }
+   else{
+		assert(line[num]=='E');
+		req_type = Request::Type::ENDITERATION;
+	}
+	
+	return true;
 }

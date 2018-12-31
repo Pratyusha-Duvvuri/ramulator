@@ -56,12 +56,20 @@ void run_dramtrace(const Config& configs, Memory<T, Controller>& memory, const c
         }
 
         if (!end){
-            req.addr = addr;
+			if(type == Request::Type::STARTITERATION){
+				//update stats with value
+				continue;
+			}
+			else if(type == Request::Type::ENDITERATION){
+				//update stats with value
+				continue;
+			}            
+			req.addr = addr;
             req.type = type;
             stall = !memory.send(req);
             if (!stall){
-                if (type == Request::Type::READ) reads++;
-                else if (type == Request::Type::WRITE) writes++;
+                if (type == Request::Type::READ || type == Request::Type::GCREAD) reads++;
+                else if (type == Request::Type::WRITE || type == Request::Type::GCWRITE) writes++;
             }
         }
         else {

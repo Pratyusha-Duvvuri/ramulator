@@ -313,10 +313,12 @@ public:
     bool enqueue(Request& req)
     {
         Queue& queue = get_queue(req.type);
+		//cout<< "Queue max: " << queue.max << ", Queue Size: "<< queue.size() << "\n";
+		//error in cputrace/memory files occurring due to assert(res) failing
+		//possible due to mismatch in queue sizes
         if (queue.max == queue.size())
             return false;
-
-        req.arrive = clk;
+		req.arrive = clk;
         queue.q.push_back(req);
         // shortcut for read requests, if a write to same addr exists
         // necessary for coherence

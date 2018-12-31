@@ -27,6 +27,10 @@ public:
         POWERDOWN,
         SELFREFRESH,
         EXTENSION,
+		GCREAD,		
+        GCWRITE,
+		STARTITERATION,
+		ENDITERATION,
         MAX
     } type;
 
