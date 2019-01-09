@@ -177,7 +177,7 @@ Core::Core(const Config& configs, int coreid,
     req_addr = memory.page_allocator(req_addr, id);
   }
 
-  
+
   // regStats
   record_cycs.name("record_cycs_core_" + to_string(id))
              .desc("Record cycle number for calculating weighted speedup. (Only valid when expected limit instruction number is non zero in config file.)")
@@ -452,8 +452,9 @@ bool Trace::get_filtered_request(long& bubble_cnt, long& req_addr, Request::Type
     return true;
 }
 
-bool Trace::get_dramtrace_request(long& req_addr, Request::Type& req_type)
-{
+
+bool Trace::get_dramtrace_request(long& req_addr, Request::Type& req_type,
+                                  bool& in_memory)
     string line;
     getline(file, line);
     if (file.eof()) {
@@ -471,7 +472,7 @@ bool Trace::get_dramtrace_request(long& req_addr, Request::Type& req_type)
 			req_type = Request::Type::READ;
 	    else if (line.substr(pos)[0] == 'W')
 			req_type = Request::Type::WRITE;
-	    else 
+	    else
 			assert(false);
 	}
 	else if(line[num]=='G')
@@ -496,6 +497,6 @@ bool Trace::get_dramtrace_request(long& req_addr, Request::Type& req_type)
 		assert(line[num]=='E');
 		req_type = Request::Type::ENDITERATION;
 	}
-	
+
 	return true;
 }

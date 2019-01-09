@@ -14,6 +14,8 @@ class Request
 public:
     bool is_first_command;
     long addr;
+    bool in_mem;
+    
     // long addr_row;
     vector<int> addr_vec;
     // specify which core this request sent from, for virtual address translation
@@ -27,7 +29,7 @@ public:
         POWERDOWN,
         SELFREFRESH,
         EXTENSION,
-		GCREAD,		
+		GCREAD,
         GCWRITE,
 		STARTITERATION,
 		ENDITERATION,
@@ -55,4 +57,3 @@ public:
 } /*namespace ramulator*/
 
 #endif /*__REQUEST_H*/
-
